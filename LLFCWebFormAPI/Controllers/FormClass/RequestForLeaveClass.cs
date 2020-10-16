@@ -21,7 +21,7 @@ namespace LLFCWebFormAPI.Controllers.FormClass
 
             DateTime dateTime = DateTime.UtcNow.Date;
 
-            string EmployeeName = GenFunct.ToTitleCase($"{Param.Employee.FirstName} {Param.Employee.MiddleName}. {Param.Employee.LastName} {Param.Employee.Suffix}");
+            string EmployeeName = GenFunct.ToTitleCase($"{Param.Employee.FullName}");
             string DateOfFiling = dateTime.ToString("MM/dd/yyyy");
             string InclusiveDateFrom = Param.InclusiveDateFrom;
             string InclusiveDateTo = Param.InclusiveDateTo;
@@ -46,7 +46,7 @@ namespace LLFCWebFormAPI.Controllers.FormClass
                 TypeOfLeave = "OtherLeave";
             }
 
-            int EmployeeID = DBAccess.GetEmployeeID(Param.Employee.FirstName, Param.Employee.LastName);
+            int EmployeeID = DBAccess.GetEmployeeID(Param.Employee.EmployeeID);
 
             Signatory LeaveFormSignatory = DBAccess.GetSignatory(EmployeeID);
             Employee SignatoryDetails = LeaveFormSignatory.EmployeeDetail;
@@ -82,6 +82,7 @@ namespace LLFCWebFormAPI.Controllers.FormClass
                 FormToWord.ApplyDataToBookmark(bookmarks, doc);
 
                 doc.Save();
+                //doc.SaveAs2(FormController.ServerPathTempForms() + Param.FileName + ".pdf", WdSaveFormat.wdFormatPDF);
                 doc.Close();
 
                 app.Quit();

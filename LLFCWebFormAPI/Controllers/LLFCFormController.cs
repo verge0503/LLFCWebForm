@@ -1,5 +1,6 @@
 ﻿using LLFCWebFormAPI.Controllers.FormClass;
 using LLFCWebFormAPI.Models;
+using LLFCWebFormAPI.Models.ITInvetory;
 using Microsoft.Office.Interop.Word;
 using System;
 using System.Collections.Generic;
@@ -20,8 +21,13 @@ namespace LLFCWebFormAPI.Controllers
     {
         FormToWord FormToWord = new FormToWord();
         DatabaseAccess DatabaseAccess = new DatabaseAccess();
+        ITInventoryDatabaseAccess ITInventoryDBAccess = new ITInventoryDatabaseAccess();
 
-        string connectionString = WebConfigurationManager.AppSettings["DBConnectionString"];
+        //string connectionString = WebConfigurationManager.AppSettings["DBConnectionString"];
+        
+        LLFCFormController FormController = new LLFCFormController();
+        DatabaseAccess DBAccess = new DatabaseAccess();
+        GeneralFunctions GenFunct = new GeneralFunctions();
 
         public string ServerPathTempForms()
         {
@@ -40,23 +46,106 @@ namespace LLFCWebFormAPI.Controllers
         [HttpPost]
         public IHttpActionResult GenerateRequestForLeave(RequestForLeave Param)
         {
+            //JSON returnJSON = new JSON();
+
+            //try
+            //{
+            //    RequestForLeaveClass requestForLeaveClass = new RequestForLeaveClass();
+
+            //    returnJSON = requestForLeaveClass.GenerateRequestForLeave(Param);
+
+            //    var response = ResponseMessage(Response(returnJSON.FormData.FormDownloadFile));
+
+            //    return response;
+            //}
+            //catch (Exception ex)
+            //{
+            //    returnJSON.Message = ex.Message;
+            //    return Json(returnJSON);
+            //}
+
             JSON returnJSON = new JSON();
 
-            try
-            {
-                RequestForLeaveClass requestForLeaveClass = new RequestForLeaveClass();
+            //DateTime dateTime = DateTime.UtcNow.Date;
 
-                returnJSON = requestForLeaveClass.GenerateRequestForLeave(Param);
+            //string EmployeeName = GenFunct.ToTitleCase($"{Param.Employee.FullName}");
+            //string DateOfFiling = dateTime.ToString("MM/dd/yyyy");
+            //string InclusiveDateFrom = Param.InclusiveDateFrom;
+            //string InclusiveDateTo = Param.InclusiveDateTo;
+            //string GroupUnit = Param.GroupUnit;
+            ////string Salary = Param.Salary;
+            //string TypeOfLeave;
 
-                var response = ResponseMessage(Response(returnJSON.FormData.FormDownloadFile));
+            //if (Param.LeaveTypeID == 1)
+            //{
+            //    TypeOfLeave = "VacationLeave";
+            //}
+            //else if (Param.LeaveTypeID == 2)
+            //{
+            //    TypeOfLeave = "SickLeave";
+            //}
+            //else if (Param.LeaveTypeID == 3)
+            //{
+            //    TypeOfLeave = "TerminalLeave";
+            //}
+            //else
+            //{
+            //    TypeOfLeave = "OtherLeave";
+            //}
 
-                return response;
-            }
-            catch (Exception ex)
-            {
-                returnJSON.Message = ex.Message;
-                return Json(returnJSON);
-            }
+            //int EmployeeID = DBAccess.GetEmployeeID(Param.Employee.EmployeeID);
+
+            //Signatory LeaveFormSignatory = DBAccess.GetSignatory(EmployeeID);
+            //Employee SignatoryDetails = LeaveFormSignatory.EmployeeDetail;
+            //string SignatoryFullname = GenFunct.ToTitleCase($"{SignatoryDetails.EmployeeFirstName} {SignatoryDetails.EmployeeMiddleName}. {SignatoryDetails.EmployeeLastName} {SignatoryDetails.EmployeeSuffix}");
+
+            //Application app = new Application();
+            //object misValue = System.Reflection.Missing.Value;
+
+            //if (File.Exists(FormController.ServerPathTempForms() + Param.FileName + ".docx"))
+            //{
+            //    File.Delete(FormController.ServerPathTempForms() + Param.FileName + ".docx");
+            //}
+
+            //try
+            //{
+            //    File.Copy(FormController.ServerPathFormsTemplate() + "Application for Leave of Absence.docx", FormController.ServerPathTempForms() + Param.FileName + ".docx");
+
+            //    Document doc = app.Documents.Open(FormController.ServerPathTempForms() + Param.FileName + ".docx");
+
+            //    Dictionary<string, string> bookmarks = new Dictionary<string, string> {
+            //        { "DateOfFiling", DateOfFiling },
+            //        { "InclusiveDateFrom", InclusiveDateFrom },
+            //        { "InclusiveDateTo", InclusiveDateTo },
+            //        { "EmployeeName", EmployeeName },
+            //        { "GroupUnit", DBAccess.GetDepartment(Convert.ToInt32(Param.GroupUnit)).DepartmentDescription },
+            //        //{ "Salary", Salary },
+            //        { TypeOfLeave, "X"},
+            //        { "CausePurpose", Param.LeaveCausePurpose },
+            //        { "SpecifiedOtherLeave", Param.OtherReason },
+            //        { "Signatory", SignatoryFullname }
+            //    };
+
+            //    FormToWord.ApplyDataToBookmark(bookmarks, doc);
+
+            //    doc.Save();
+            //    //doc.SaveAs2(FormController.ServerPathTempForms() + Param.FileName + ".pdf", WdSaveFormat.wdFormatPDF);
+            //    doc.Close();
+
+            //    app.Quit();
+
+            //    LLFCForm LLFCFormObj = new LLFCForm();
+            //    LLFCFormObj.FormDownloadFile = Param.FileName;
+
+            //    returnJSON.FormData = LLFCFormObj;
+            //}
+            //catch (Exception ex)
+            //{
+            //    app.Quit();
+            //    returnJSON.Message = $"Error Occured: {ex.Message}";
+            //}
+
+            return Json(returnJSON);
         }
 
         [HttpPost]
@@ -118,7 +207,7 @@ namespace LLFCWebFormAPI.Controllers
                     }
                 }
 
-                foreach(SpecificUndertaking undertaking in Param.SpecificUndertakings)
+                foreach (SpecificUndertaking undertaking in Param.SpecificUndertakings)
                 {
                     SpecificUndertakingCounter += 1;
 
@@ -331,7 +420,6 @@ namespace LLFCWebFormAPI.Controllers
             }
         }
 
-
         [HttpPost]
         public IHttpActionResult GenerateITAccessRequest(ITAccessRequest Param)
         {
@@ -353,7 +441,6 @@ namespace LLFCWebFormAPI.Controllers
                 return Json(returnJSON);
             }
         }
-
 
         [HttpPost]
         public IHttpActionResult GeneratePurchaseRequest(PurchaseRequest Param)
@@ -399,6 +486,28 @@ namespace LLFCWebFormAPI.Controllers
             }
         }
 
+        [HttpPost]
+        public IHttpActionResult GenerateWebsiteJobRequest(WebsiteJobRequest Param)
+        {
+            JSON returnJSON = new JSON();
+
+            try
+            {
+                WebsiteJobRequestClass websiteJobRequestClass = new WebsiteJobRequestClass();
+
+                returnJSON = websiteJobRequestClass.GenerateWebsiteJobRequest(Param);
+
+                var response = ResponseMessage(Response(returnJSON.FormData.FormDownloadFile));
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                returnJSON.Message = ex.Message;
+                return Json(returnJSON);
+            }
+        }
+
         [HttpGet]
         public IHttpActionResult GetDepartmentList()
         {
@@ -410,8 +519,8 @@ namespace LLFCWebFormAPI.Controllers
             try
             {
                 JSONReturn.Data = Departments;
-                JSONReturn.Message = connectionString;
-            } 
+                //JSONReturn.Message = connectionString;
+            }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
@@ -493,6 +602,20 @@ namespace LLFCWebFormAPI.Controllers
         public HttpResponseMessage Response(string filename)
         {
             var path = ServerPathTempForms() + filename + ".docx";
+            HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK);
+            var stream = new FileStream(path, FileMode.Open);
+            result.Content = new StreamContent(stream);
+            result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment");
+            result.Content.Headers.ContentDisposition.FileName = Path.GetFileName(path);
+            result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+            result.Content.Headers.ContentLength = stream.Length;
+
+            return result;
+        }
+
+        public HttpResponseMessage ResponsePDF(string filename)
+        {
+            var path = ServerPathTempForms() + filename + ".pdf";
             HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK);
             var stream = new FileStream(path, FileMode.Open);
             result.Content = new StreamContent(stream);

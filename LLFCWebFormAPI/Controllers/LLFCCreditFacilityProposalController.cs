@@ -24,6 +24,19 @@ namespace LLFCWebFormAPI.Controllers
         string connectionString = WebConfigurationManager.AppSettings["DBConnectionString"];
 
         [HttpGet]
+        public IHttpActionResult GetStringFromAppSetting()
+        {
+            JSON JSONReturn = new JSON();
+            string result = "";
+
+            result = DatabaseAccess.GetStringFromAppSetting();
+
+            JSONReturn.Message = result;
+
+            return Json(JSONReturn);
+        }
+
+        [HttpGet]
         public IHttpActionResult GetAccountList()
         {
             JSON JSONReturn = new JSON();
@@ -386,6 +399,124 @@ namespace LLFCWebFormAPI.Controllers
             try
             {
                 JSONReturn.Data = lLFCExperienceAccountRelationship;
+                JSONReturn.Message = connectionString;
+            }
+            catch (Exception ex)
+            {
+                returnJSON.Message = ex.Message;
+                return Json(returnJSON);
+            }
+
+            return Json(JSONReturn);
+        }
+
+        [HttpPost]
+        public IHttpActionResult AddNewFinancialPosition(FinancialPosition Param)
+        {
+            JSON JSONReturn = new JSON();
+
+            DatabaseAccess.AddNewFinancialPosition(Param);
+            JSON returnJSON = new JSON();
+
+            try
+            {
+                //JSONReturn.Data = clientDetails;
+                //JSONReturn.Message = connectionString;
+            }
+            catch (Exception ex)
+            {
+                returnJSON.Message = ex.Message;
+                return Json(returnJSON);
+            }
+
+            return Json(JSONReturn);
+        }
+
+        [HttpPost]
+        public IHttpActionResult GetFinancialPosition(AccountDetails Param)
+        {
+            JSON JSONReturn = new JSON();
+            FinancialPosition financialPosition = new FinancialPosition();
+
+            financialPosition = DatabaseAccess.GetFinancialPosition(Param);
+
+            JSONReturn.Data = financialPosition;
+            JSONReturn.Message = "Success";
+
+            return Json(JSONReturn);
+        }
+
+        [HttpPost]
+        public IHttpActionResult UpdateFinancialPosition(FinancialPosition Param)
+        {
+            JSON JSONReturn = new JSON();
+            FinancialPosition financialPosition = new FinancialPosition();
+
+            DatabaseAccess.UpdateFinancialPosition(Param);
+            JSON returnJSON = new JSON();
+
+            try
+            {
+                JSONReturn.Data = financialPosition;
+                JSONReturn.Message = connectionString;
+            }
+            catch (Exception ex)
+            {
+                returnJSON.Message = ex.Message;
+                return Json(returnJSON);
+            }
+
+            return Json(JSONReturn);
+        }
+
+        [HttpPost]
+        public IHttpActionResult AddNewFinancialProjections(FinancialProjections Param)
+        {
+            JSON JSONReturn = new JSON();
+
+            DatabaseAccess.AddNewFinancialProjections(Param);
+            JSON returnJSON = new JSON();
+
+            try
+            {
+                //JSONReturn.Data = clientDetails;
+                //JSONReturn.Message = connectionString;
+            }
+            catch (Exception ex)
+            {
+                returnJSON.Message = ex.Message;
+                return Json(returnJSON);
+            }
+
+            return Json(JSONReturn);
+        }
+
+        [HttpPost]
+        public IHttpActionResult GetFinancialProjections(AccountDetails Param)
+        {
+            JSON JSONReturn = new JSON();
+            FinancialProjections financialProjections = new FinancialProjections();
+
+            financialProjections = DatabaseAccess.GetFinancialProjections(Param);
+
+            JSONReturn.Data = financialProjections;
+            JSONReturn.Message = "Success";
+
+            return Json(JSONReturn);
+        }
+
+        [HttpPost]
+        public IHttpActionResult UpdateFinancialProjections(FinancialProjections Param)
+        {
+            JSON JSONReturn = new JSON();
+            FinancialProjections financialProjections = new FinancialProjections();
+
+            DatabaseAccess.UpdateFinancialProjections(Param);
+            JSON returnJSON = new JSON();
+
+            try
+            {
+                JSONReturn.Data = financialProjections;
                 JSONReturn.Message = connectionString;
             }
             catch (Exception ex)

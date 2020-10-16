@@ -12,17 +12,33 @@ namespace LLFCWebFormAPI.Controllers
 {
     public class DatabaseAccess
     {
-        string connectionString = WebConfigurationManager.AppSettings["DBConnectionString"];
+        //string conn = WebConfigurationManager.AppSettings["DBconn"];
+
         GeneralFunctions genFunc = new GeneralFunctions();
+        const string APP_SETTING_ERROR_MESSAGE = "Invalid or missing appSetting, ";
+
+        public string GetStringFromAppSetting()
+        {
+            if (WebConfigurationManager.AppSettings["DBconn"] != null && !String.IsNullOrEmpty(WebConfigurationManager.AppSettings["DBconn"].ToString()))
+            {
+                return WebConfigurationManager.AppSettings["DBconn"].ToString();
+            }
+            else
+            {
+                throw new Exception(APP_SETTING_ERROR_MESSAGE + "DBconn");
+            }
+        }
 
         public List<Department> DepartmentList()
         {
+            string conn = WebConfigurationManager.AppSettings["DBconn"];
+
             List<Department> DeparmentList = new List<Department>();
             Department DepartmentObj;
 
             string strSQL = "SELECT Department_ID, Department_Description FROM tbl_LLFCDepartmentList";
 
-            using (OleDbConnection connection = new OleDbConnection(connectionString))
+            using (OleDbConnection connection = new OleDbConnection(conn))
             {
                 OleDbCommand command = new OleDbCommand(strSQL, connection);
                 try
@@ -51,12 +67,14 @@ namespace LLFCWebFormAPI.Controllers
 
         public List<LeaveType> LeaveTypeList()
         {
+            string conn = WebConfigurationManager.AppSettings["DBconn"];
+
             List<LeaveType> LeaveTypeList = new List<LeaveType>();
             LeaveType LeaveTypeObj;
 
             string strSQL = "SELECT Leave_ID, Leave_Description FROM tbl_LLFCLeaveTypeList";
 
-            using (OleDbConnection connection = new OleDbConnection(connectionString))
+            using (OleDbConnection connection = new OleDbConnection(conn))
             {
                 OleDbCommand command = new OleDbCommand(strSQL, connection);
                 try
@@ -85,12 +103,14 @@ namespace LLFCWebFormAPI.Controllers
 
         public List<FormOfPayment> FormOfPaymentList()
         {
+            string conn = WebConfigurationManager.AppSettings["DBconn"];
+
             List<FormOfPayment> FormOfPaymentList = new List<FormOfPayment>();
             FormOfPayment FormOfPaymentObj;
 
             string strSQL = "SELECT Form_Of_Payment_ID, Form_Of_Payment_Description FROM tbl_FormOfPayment";
 
-            using (OleDbConnection connection = new OleDbConnection(connectionString))
+            using (OleDbConnection connection = new OleDbConnection(conn))
             {
                 OleDbCommand command = new OleDbCommand(strSQL, connection);
                 try
@@ -119,12 +139,14 @@ namespace LLFCWebFormAPI.Controllers
 
         public List<Position> PositionList()
         {
+            string conn = WebConfigurationManager.AppSettings["DBconn"];
+
             List<Position> PositionList = new List<Position>();
             Position PositionObj;
 
             string strSQL = "SELECT Position_ID, Position_Description FROM tbl_LLFCPositionList";
 
-            using (OleDbConnection connection = new OleDbConnection(connectionString))
+            using (OleDbConnection connection = new OleDbConnection(conn))
             {
                 OleDbCommand command = new OleDbCommand(strSQL, connection);
                 try
@@ -153,12 +175,14 @@ namespace LLFCWebFormAPI.Controllers
 
         public List<SalaryGrade> SalaryGradeList()
         {
+            string conn = WebConfigurationManager.AppSettings["DBconn"];
+
             List<SalaryGrade> SalaryGradeList = new List<SalaryGrade>();
             SalaryGrade SalaryGradeObj;
 
             string strSQL = "SELECT Salary_Grade_ID, Salary_Grade FROM tbl_SalaryGrade";
 
-            using (OleDbConnection connection = new OleDbConnection(connectionString))
+            using (OleDbConnection connection = new OleDbConnection(conn))
             {
                 OleDbCommand command = new OleDbCommand(strSQL, connection);
                 try
@@ -187,12 +211,14 @@ namespace LLFCWebFormAPI.Controllers
 
         public List<SalaryPerStep> SalaryPerStepList()
         {
+            string conn = WebConfigurationManager.AppSettings["DBconn"];
+
             List<SalaryPerStep> SalaryPerStepList = new List<SalaryPerStep>();
             SalaryPerStep SalaryPerStepObj;
 
             string strSQL = "SELECT Salary_Per_Step_ID, Salary_Grade_ID_FK, Salary_Grade_Step, Salary_Per_Step FROM tbl_SalaryPerStep";
 
-            using (OleDbConnection connection = new OleDbConnection(connectionString))
+            using (OleDbConnection connection = new OleDbConnection(conn))
             {
                 OleDbCommand command = new OleDbCommand(strSQL, connection);
                 try
@@ -223,6 +249,8 @@ namespace LLFCWebFormAPI.Controllers
 
         public Signatory GetSignatory(int EmployeeID)
         {
+            string conn = WebConfigurationManager.AppSettings["DBconn"];
+
             Signatory SignatoryObj = new Signatory();
             Employee EmployeeObj;
             Department DepartmentObj;
@@ -233,7 +261,7 @@ namespace LLFCWebFormAPI.Controllers
                         "tbl_LLFCEmployeeList EmpList ON EmpList.Employee_ID = EmpToSup.Superior_ID_FK) " +
                         "WHERE (EmpToSup.Employee_ID_FK =" + EmployeeID + ")";
 
-            using (OleDbConnection connection = new OleDbConnection(connectionString))
+            using (OleDbConnection connection = new OleDbConnection(conn))
             {
                 OleDbCommand command = new OleDbCommand(strSQL, connection);
                 try
@@ -273,11 +301,13 @@ namespace LLFCWebFormAPI.Controllers
 
         public FormOfPayment GetFormOfPayment (int FormPaymentID)
         {
+            string conn = WebConfigurationManager.AppSettings["DBconn"];
+
             FormOfPayment FormOfPaymentObj = new FormOfPayment();
 
             string strSQL = "SELECT Form_Of_Payment_ID, Form_Of_Payment_Description FROM tbl_FormOfPayment WHERE Form_Of_Payment_ID = " + FormPaymentID;
 
-            using (OleDbConnection connection = new OleDbConnection(connectionString))
+            using (OleDbConnection connection = new OleDbConnection(conn))
             {
                 OleDbCommand command = new OleDbCommand(strSQL, connection);
                 try
@@ -303,11 +333,13 @@ namespace LLFCWebFormAPI.Controllers
 
         public Department GetDepartment(int DepartmentID)
         {
+            string conn = WebConfigurationManager.AppSettings["DBconn"];
+
             Department DepartmentObj = new Department();
 
             string strSQL = "SELECT Department_ID, Department_Description FROM tbl_LLFCDepartmentList WHERE Department_ID = " + DepartmentID;
 
-            using (OleDbConnection connection = new OleDbConnection(connectionString))
+            using (OleDbConnection connection = new OleDbConnection(conn))
             {
                 OleDbCommand command = new OleDbCommand(strSQL, connection);
                 try
@@ -331,14 +363,16 @@ namespace LLFCWebFormAPI.Controllers
             return DepartmentObj;
         }
 
-        public int GetEmployeeID (string FirstName, string LastName)
+        public int GetEmployeeID (int EmployeeID)
         {
+            string conn = WebConfigurationManager.AppSettings["DBconn"];
+
             Employee employeeObj = new Employee();
 
             string strSQL = "SELECT Employee_ID, Employee_FirstName, Employee_LastName, Employee_MiddleName, Employee_Suffix " +
-                "FROM tbl_LLFCEmployeeList WHERE (Employee_FirstName LIKE '%" + FirstName.ToUpper() + "%') AND (Employee_LastName LIKE '%" + LastName.ToUpper() + "%')";
+                "FROM tbl_LLFCEmployeeList WHERE (Employee_Code = " + EmployeeID +")";
 
-            using (OleDbConnection connection = new OleDbConnection(connectionString))
+            using (OleDbConnection connection = new OleDbConnection(conn))
             {
                 OleDbCommand command = new OleDbCommand(strSQL, connection);
                 try
@@ -364,13 +398,15 @@ namespace LLFCWebFormAPI.Controllers
 
         public AccountDetails AddNewAccount(ClientDetails clientDetails)
         {
+            string conn = WebConfigurationManager.AppSettings["DBconn"];
+
             AccountDetails accountDetailsObj = new AccountDetails();
             accountDetailsObj.AccountName = clientDetails.AccountDetails.AccountName;
 
             string strSQL = "INSERT INTO tbl_CFPAccountList (Account_Name, Date_Added) VALUES (@AccountName, @DateAdded)";
             string strSQL2 = "SELECT @@Identity";
 
-            using (OleDbConnection connection = new OleDbConnection(connectionString))
+            using (OleDbConnection connection = new OleDbConnection(conn))
             {
                 connection.Open();
                 OleDbCommand command = new OleDbCommand(strSQL, connection);
@@ -399,12 +435,14 @@ namespace LLFCWebFormAPI.Controllers
 
         public List<AccountDetails> AccountList()
         {
+            string conn = WebConfigurationManager.AppSettings["DBconn"];
+
             List<AccountDetails> accounts = new List<AccountDetails>();
             AccountDetails accountDetailsObj = new AccountDetails();
 
             string strSQL = "SELECT Account_ID, Account_Name, Date_Added FROM tbl_CFPAccountList";
 
-            using (OleDbConnection connection = new OleDbConnection(connectionString))
+            using (OleDbConnection connection = new OleDbConnection(conn))
             {
                 connection.Open();
 
@@ -437,6 +475,8 @@ namespace LLFCWebFormAPI.Controllers
 
         public void AddNewClientDetails(ClientDetails clientDetails)
         {
+            string conn = WebConfigurationManager.AppSettings["DBconn"];
+
             string strSQL = "INSERT INTO tbl_CFPAccountClientDetails (Account_ID_FK, Business_Address, Contact_Number_Person, Industry, PSIC_Code, Client_Type, Tax_Identification_Number, Income_Tax_Paid, Manpower_Complement, Credit_Rating, Client_Since, Account_Source) " +
                 "VALUES (" +
                 "@AccountID, " +
@@ -452,7 +492,7 @@ namespace LLFCWebFormAPI.Controllers
                 "@ClientSince, " +
                 "@AccountSource)";
 
-            using (OleDbConnection connection = new OleDbConnection(connectionString))
+            using (OleDbConnection connection = new OleDbConnection(conn))
             {
                 connection.Open();
                 OleDbCommand command = new OleDbCommand(strSQL, connection);
@@ -484,6 +524,8 @@ namespace LLFCWebFormAPI.Controllers
 
         public void UpdateClientDetails(ClientDetails clientDetails)
         {
+            string conn = WebConfigurationManager.AppSettings["DBconn"];
+
             string strSQL = "UPDATE tbl_CFPAccountClientDetails SET " +
                 "Business_Address = @BusinessAddress, " +
                 "Contact_Number_Person = @ContactPerson, " +
@@ -498,7 +540,7 @@ namespace LLFCWebFormAPI.Controllers
                 "Account_Source = @AccountSource " +
                 "WHERE Account_ID_FK = @AccountID";
 
-            using (OleDbConnection connection = new OleDbConnection(connectionString))
+            using (OleDbConnection connection = new OleDbConnection(conn))
             {
                 connection.Open();
                 OleDbCommand command = new OleDbCommand(strSQL, connection);
@@ -530,12 +572,14 @@ namespace LLFCWebFormAPI.Controllers
 
         public ClientDetails GetClientDetails(AccountDetails accountDetails)
         {
+            string conn = WebConfigurationManager.AppSettings["DBconn"];
+
             AccountDetails accountDetailsObj = new AccountDetails();
             ClientDetails clientDetailsObj = new ClientDetails();
 
             string strSQL = "SELECT * FROM tbl_CFPAccountClientDetails WHERE Account_ID_FK = @AccountID";
 
-            using (OleDbConnection connection = new OleDbConnection(connectionString))
+            using (OleDbConnection connection = new OleDbConnection(conn))
             {
                 connection.Open();
 
@@ -580,8 +624,10 @@ namespace LLFCWebFormAPI.Controllers
 
         public void AddNewOtherCollateral(OtherCollateral otherCollateral)
         {
+            string conn = WebConfigurationManager.AppSettings["DBconn"];
+
             string strSQL = "INSERT INTO tbl_CFPOtherCollateral (Account_ID_FK, OtherCollateral_Description) VALUES (@AccountID, @OtherCollateralDescriptiion)";
-            using (OleDbConnection connection = new OleDbConnection(connectionString))
+            using (OleDbConnection connection = new OleDbConnection(conn))
             {
                 connection.Open();
                 OleDbCommand command = new OleDbCommand(strSQL, connection);
@@ -603,12 +649,14 @@ namespace LLFCWebFormAPI.Controllers
 
         public OtherCollateral GetOtherCollateral(AccountDetails accountDetails)
         {
+            string conn = WebConfigurationManager.AppSettings["DBconn"];
+
             AccountDetails accountDetailsObj = new AccountDetails();
             OtherCollateral otherCollateralObj = new OtherCollateral();
 
             string strSQL = "SELECT * FROM tbl_CFPOtherCollateral WHERE Account_ID_FK = @AccountID";
 
-            using (OleDbConnection connection = new OleDbConnection(connectionString))
+            using (OleDbConnection connection = new OleDbConnection(conn))
             {
                 connection.Open();
 
@@ -644,11 +692,13 @@ namespace LLFCWebFormAPI.Controllers
 
         public void UpdateOtherCollateral(OtherCollateral otherCollateral)
         {
+            string conn = WebConfigurationManager.AppSettings["DBconn"];
+
             string strSQL = "UPDATE tbl_CFPOtherCollateral SET " +
                 "OtherCollateral_Description = @OtherCollateralDescription " +
                 "WHERE Account_ID_FK = @AccountID";
 
-            using (OleDbConnection connection = new OleDbConnection(connectionString))
+            using (OleDbConnection connection = new OleDbConnection(conn))
             {
                 connection.Open();
                 OleDbCommand command = new OleDbCommand(strSQL, connection);
@@ -670,6 +720,8 @@ namespace LLFCWebFormAPI.Controllers
 
         public void AddNewTermsAndConditions(TermsAndConditions termsAndConditions)
         {
+            string conn = WebConfigurationManager.AppSettings["DBconn"];
+
             string strSQL = "INSERT INTO tbl_CFPTermsAndConditions(Account_ID_FK, Proposed_Facility, Purpose, Amount_Facility, LLFC_Training, Term, Interest_Rate, Mode_Of_Payment, Availment_Method, Security_Collateral, Other_Conditions, Other_Terms_And_Conditions)" +
                 "VALUES(" +
                 "@AccountID," +
@@ -686,7 +738,7 @@ namespace LLFCWebFormAPI.Controllers
                 "@OtherTermsAndCondition" +
                 ")";
 
-            using (OleDbConnection connection = new OleDbConnection(connectionString))
+            using (OleDbConnection connection = new OleDbConnection(conn))
             {
                 connection.Open();
                 OleDbCommand command = new OleDbCommand(strSQL, connection);
@@ -718,12 +770,14 @@ namespace LLFCWebFormAPI.Controllers
 
         public TermsAndConditions GetTermsAndConditions(AccountDetails accountDetails)
         {
+            string conn = WebConfigurationManager.AppSettings["DBconn"];
+
             AccountDetails accountDetailsObj = new AccountDetails();
             TermsAndConditions termsAndConditionsObj = new TermsAndConditions();
 
             string strSQL = "SELECT * FROM tbl_CFPTermsAndConditions WHERE Account_ID_FK = @AccountID";
 
-            using (OleDbConnection connection = new OleDbConnection(connectionString))
+            using (OleDbConnection connection = new OleDbConnection(conn))
             {
                 connection.Open();
 
@@ -769,6 +823,8 @@ namespace LLFCWebFormAPI.Controllers
 
         public void UpdateTermsAndConditions(TermsAndConditions termsAndConditions)
         {
+            string conn = WebConfigurationManager.AppSettings["DBconn"];
+
             string strSQL = "UPDATE tbl_CFPTermsAndConditions SET " +
                 "Proposed_Facility = @ProposedFacility, " +
                 "Purpose = @Purpose, " +
@@ -783,7 +839,7 @@ namespace LLFCWebFormAPI.Controllers
                 "Other_Terms_And_Conditions = @OtherTermsAndCondition " +
                 "WHERE Account_ID_FK = @AccountID";
 
-            using (OleDbConnection connection = new OleDbConnection(connectionString))
+            using (OleDbConnection connection = new OleDbConnection(conn))
             {
                 connection.Open();
                 OleDbCommand command = new OleDbCommand(strSQL, connection);
@@ -815,6 +871,7 @@ namespace LLFCWebFormAPI.Controllers
 
         public void AddNewBasisForRecommendation(BasisForRecommendation basisForRecommendation)
         {
+            string conn = WebConfigurationManager.AppSettings["DBconn"];
 
             string strSQL = "INSERT INTO tbl_CFPBasisForRecommendation(Account_ID_FK, Character_AP, Character_Performance, Capacity_AP, Capacity_Performance, Capital_AP, Capital_Performance, Condition_AP, Condition_Performance)" +
                 "VALUES(" +
@@ -829,7 +886,7 @@ namespace LLFCWebFormAPI.Controllers
                 "@ConditionPerformance" +
                 ")";
 
-            using (OleDbConnection connection = new OleDbConnection(connectionString))
+            using (OleDbConnection connection = new OleDbConnection(conn))
             {
                 connection.Open();
                 OleDbCommand command = new OleDbCommand(strSQL, connection);
@@ -858,12 +915,14 @@ namespace LLFCWebFormAPI.Controllers
 
         public BasisForRecommendation GetBasisForRecommendation(AccountDetails accountDetails)
         {
+            string conn = WebConfigurationManager.AppSettings["DBconn"];
+
             AccountDetails accountDetailsObj = new AccountDetails();
             BasisForRecommendation basisForRecommendationObj = new BasisForRecommendation();
 
             string strSQL = "SELECT * FROM tbl_CFPBasisForRecommendation WHERE Account_ID_FK = @AccountID";
 
-            using (OleDbConnection connection = new OleDbConnection(connectionString))
+            using (OleDbConnection connection = new OleDbConnection(conn))
             {
                 connection.Open();
 
@@ -906,6 +965,8 @@ namespace LLFCWebFormAPI.Controllers
 
         public void UpdateBasisForRecommendation(BasisForRecommendation basisForRecommendation)
         {
+            string conn = WebConfigurationManager.AppSettings["DBconn"];
+
             string strSQL = "UPDATE tbl_CFPBasisForRecommendation SET " +
                 "Character_AP = @CharacterAP, " +
                 "Character_Performance = @CharacterPerformance, " +
@@ -917,7 +978,7 @@ namespace LLFCWebFormAPI.Controllers
                 "Condition_Performance = @ConditionPerformance " +
                 "WHERE Account_ID_FK = @AccountID";
 
-            using (OleDbConnection connection = new OleDbConnection(connectionString))
+            using (OleDbConnection connection = new OleDbConnection(conn))
             {
                 connection.Open();
                 OleDbCommand command = new OleDbCommand(strSQL, connection);
@@ -942,10 +1003,11 @@ namespace LLFCWebFormAPI.Controllers
 
                 connection.Close();
             }
-        }
+        } 
 
         public void AddNewProjectDescription(ProjectDescription projectDescription)
         {
+            string conn = WebConfigurationManager.AppSettings["DBconn"];
 
             string strSQL = "INSERT INTO tbl_CFPProjectDescription(Account_ID_FK, Proposed_Facility)" +
                 "VALUES(" +
@@ -953,7 +1015,7 @@ namespace LLFCWebFormAPI.Controllers
                 "@ProposedFacility" +
                 ")";
 
-            using (OleDbConnection connection = new OleDbConnection(connectionString))
+            using (OleDbConnection connection = new OleDbConnection(conn))
             {
                 connection.Open();
                 OleDbCommand command = new OleDbCommand(strSQL, connection);
@@ -975,12 +1037,14 @@ namespace LLFCWebFormAPI.Controllers
 
         public ProjectDescription GetProjectDescription(AccountDetails accountDetails)
         {
+            string conn = WebConfigurationManager.AppSettings["DBconn"];
+
             AccountDetails accountDetailsObj = new AccountDetails();
             ProjectDescription projectDescriptionObj = new ProjectDescription();
 
             string strSQL = "SELECT * FROM tbl_CFPProjectDescription WHERE Account_ID_FK = @AccountID";
 
-            using (OleDbConnection connection = new OleDbConnection(connectionString))
+            using (OleDbConnection connection = new OleDbConnection(conn))
             {
                 connection.Open();
 
@@ -1016,11 +1080,13 @@ namespace LLFCWebFormAPI.Controllers
 
         public void UpdateProjectDescription(ProjectDescription projectDescription)
         {
+            string conn = WebConfigurationManager.AppSettings["DBconn"];
+
             string strSQL = "UPDATE tbl_CFPProjectDescription SET " +
                 "Proposed_Facility = @ProposedFacility " +
                 "WHERE Account_ID_FK = @AccountID";
 
-            using (OleDbConnection connection = new OleDbConnection(connectionString))
+            using (OleDbConnection connection = new OleDbConnection(conn))
             {
                 connection.Open();
                 OleDbCommand command = new OleDbCommand(strSQL, connection);
@@ -1042,13 +1108,15 @@ namespace LLFCWebFormAPI.Controllers
 
         public void AddNewLLFCExperienceAccountRelationship(LLFCExperienceAccountRelationship lLFCExperienceAccountRelationship)
         {
+            string conn = WebConfigurationManager.AppSettings["DBconn"];
+
             string strSQL = "INSERT INTO tbl_CFPLLFCExperienceAccountRelationship(Account_ID_FK, LLFC_Experience_Account_Relationship_Description)" +
                 "VALUES(" +
                 "@AccountID," +
                 "@LLFCExperienceAccountRelationshipDescription" +
                 ")";
 
-            using (OleDbConnection connection = new OleDbConnection(connectionString))
+            using (OleDbConnection connection = new OleDbConnection(conn))
             {
                 connection.Open();
                 OleDbCommand command = new OleDbCommand(strSQL, connection);
@@ -1070,12 +1138,14 @@ namespace LLFCWebFormAPI.Controllers
 
         public LLFCExperienceAccountRelationship GetLLFCExperienceAccountRelationship(AccountDetails accountDetails)
         {
+            string conn = WebConfigurationManager.AppSettings["DBconn"];
+
             AccountDetails accountDetailsObj = new AccountDetails();
             LLFCExperienceAccountRelationship lLFCExperienceAccountRelationshipObj = new LLFCExperienceAccountRelationship();
 
             string strSQL = "SELECT * FROM tbl_CFPLLFCExperienceAccountRelationship WHERE Account_ID_FK = @AccountID";
 
-            using (OleDbConnection connection = new OleDbConnection(connectionString))
+            using (OleDbConnection connection = new OleDbConnection(conn))
             {
                 connection.Open();
 
@@ -1111,11 +1181,13 @@ namespace LLFCWebFormAPI.Controllers
 
         public void UpdateLLFCExperienceAccountRelationship(LLFCExperienceAccountRelationship lLFCExperienceAccountRelationship)
         {
+            string conn = WebConfigurationManager.AppSettings["DBconn"];
+
             string strSQL = "UPDATE tbl_CFPLLFCExperienceAccountRelationship SET " +
                 "LLFC_Experience_Account_Relationship_Description = @LLFCExperienceAccountRelationshipDescription " +
                 "WHERE Account_ID_FK = @AccountID";
 
-            using (OleDbConnection connection = new OleDbConnection(connectionString))
+            using (OleDbConnection connection = new OleDbConnection(conn))
             {
                 connection.Open();
                 OleDbCommand command = new OleDbCommand(strSQL, connection);
@@ -1137,6 +1209,8 @@ namespace LLFCWebFormAPI.Controllers
 
         public void AddNewFinancialPosition(FinancialPosition financialPosition)
         {
+            string conn = WebConfigurationManager.AppSettings["DBconn"];
+
             string strSQL = "INSERT INTO tbl_CFPFinancialPosition(Account_ID_FK, Auditor, Auditors_Unqualified_Opinion, Liquidity, Solvency_And_Capital_Adequacy, Profitability)" +
                 "VALUES(" +
                 "@AccountID," +
@@ -1147,7 +1221,7 @@ namespace LLFCWebFormAPI.Controllers
                 "@Profitability" +
                 ")";
 
-            using (OleDbConnection connection = new OleDbConnection(connectionString))
+            using (OleDbConnection connection = new OleDbConnection(conn))
             {
                 connection.Open();
                 OleDbCommand command = new OleDbCommand(strSQL, connection);
@@ -1173,12 +1247,14 @@ namespace LLFCWebFormAPI.Controllers
 
         public FinancialPosition GetFinancialPosition(AccountDetails accountDetails)
         {
+            string conn = WebConfigurationManager.AppSettings["DBconn"];
+
             AccountDetails accountDetailsObj = new AccountDetails();
             FinancialPosition financialPositionoBJ = new FinancialPosition();
 
             string strSQL = "SELECT * FROM tbl_CFPFinancialPosition WHERE Account_ID_FK = @AccountID";
 
-            using (OleDbConnection connection = new OleDbConnection(connectionString))
+            using (OleDbConnection connection = new OleDbConnection(conn))
             {
                 connection.Open();
 
@@ -1218,6 +1294,8 @@ namespace LLFCWebFormAPI.Controllers
 
         public void UpdateFinancialPosition(FinancialPosition financialPosition)
         {
+            string conn = WebConfigurationManager.AppSettings["DBconn"];
+
             string strSQL = "UPDATE tbl_CFPFinancialPosition SET " +
                 "Auditor = @Auditor, " +
                 "Auditors_Unqualified_Opinion = @AuditorsUnqualifiedOpinion, " +
@@ -1226,7 +1304,7 @@ namespace LLFCWebFormAPI.Controllers
                 "Profitability = @Profitability " +
                 "WHERE Account_ID_FK = @AccountID";
 
-            using (OleDbConnection connection = new OleDbConnection(connectionString))
+            using (OleDbConnection connection = new OleDbConnection(conn))
             {
                 connection.Open();
                 OleDbCommand command = new OleDbCommand(strSQL, connection);
@@ -1252,6 +1330,8 @@ namespace LLFCWebFormAPI.Controllers
 
         public void AddNewFinancialProjections(FinancialProjections financialProjections)
         {
+            string conn = WebConfigurationManager.AppSettings["DBconn"];
+
             string strSQL = "INSERT INTO tbl_CFPFinancialProjections(Account_ID_FK, Basic_Assumptions, Projected_Income, Projected_Cash_Flows)" +
                 "VALUES(" +
                 "@AccountID," +
@@ -1260,7 +1340,7 @@ namespace LLFCWebFormAPI.Controllers
                 "@ProjectedCashFlows " +
                 ")";
 
-            using (OleDbConnection connection = new OleDbConnection(connectionString))
+            using (OleDbConnection connection = new OleDbConnection(conn))
             {
                 connection.Open();
                 OleDbCommand command = new OleDbCommand(strSQL, connection);
@@ -1284,12 +1364,14 @@ namespace LLFCWebFormAPI.Controllers
 
         public FinancialProjections GetFinancialProjections(AccountDetails accountDetails)
         {
+            string conn = WebConfigurationManager.AppSettings["DBconn"];
+
             AccountDetails accountDetailsObj = new AccountDetails();
             FinancialProjections financialProjectionsObj = new FinancialProjections();
 
             string strSQL = "SELECT * FROM tbl_CFPFinancialProjections WHERE Account_ID_FK = @AccountID";
 
-            using (OleDbConnection connection = new OleDbConnection(connectionString))
+            using (OleDbConnection connection = new OleDbConnection(conn))
             {
                 connection.Open();
 
@@ -1327,13 +1409,15 @@ namespace LLFCWebFormAPI.Controllers
 
         public void UpdateFinancialProjections(FinancialProjections financialProjections)
         {
+            string conn = WebConfigurationManager.AppSettings["DBconn"];
+
             string strSQL = "UPDATE tbl_CFPFinancialProjections SET " +
                 "Basic_Assumptions = @BasicAssumptions, " +
                 "Projected_Income = @ProjectedIncome, " +
                 "Projected_Cash_Flows = @ProjectedCashFlows " +
                 "WHERE Account_ID_FK = @AccountID";
 
-            using (OleDbConnection connection = new OleDbConnection(connectionString))
+            using (OleDbConnection connection = new OleDbConnection(conn))
             {
                 connection.Open();
                 OleDbCommand command = new OleDbCommand(strSQL, connection);

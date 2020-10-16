@@ -9,7 +9,7 @@ namespace LLFCWebFormAPI.Models
     {
         public int EmployeeID { get; set; }
 
-        public string EmployeeCode { get; set; }
+        public int EmployeeCode { get; set; }
 
         public string EmployeeFirstName { get; set; }
 
@@ -18,5 +18,7 @@ namespace LLFCWebFormAPI.Models
         public string EmployeeMiddleName { get; set; }
 
         public string EmployeeSuffix { get; set; }
+
+        public string FullName { get; set; }
     }
 }
